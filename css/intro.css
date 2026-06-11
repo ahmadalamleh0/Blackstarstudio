@@ -1,0 +1,175 @@
+/* ============================================================
+   BLACK STAR STUDIO — INTRO ANIMATION STYLES
+   Timing is controlled entirely in js/intro.js (TIMING object)
+   ============================================================ */
+
+
+/* ---- LOCAL FONTS ----------------------------------------- */
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url('../ethnocentric/Ethnocentric-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block; /* block prevents flash during cinematic intro */
+}
+
+@font-face {
+  font-family: 'BrittanySignature';
+  src: url('../brittany-signature-script/BrittanySignatureScript.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+
+
+/* ---- OVERLAY --------------------------------------------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #070707;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Cinematic vignette — darkens corners for depth */
+.intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 85% 80% at 50% 50%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* ---- LOGO CONTAINER -------------------------------------- */
+.intro__logo {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+
+/* ---- ROW WRAPPERS ---------------------------------------- */
+.intro__row {
+  display: block;
+  line-height: 1;
+}
+
+/* Studio + star share a flex row */
+.intro__row--studio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.08em;
+  margin-top: 0em;
+}
+
+
+/* ---- BASE WORD STYLE ------------------------------------- */
+.iw {
+  display: inline-block;
+  will-change: clip-path, filter, transform;
+  /* Hidden until GSAP reveals; set here as CSS fallback */
+  clip-path: inset(0 100% 0 0);
+}
+
+
+/* BLACK / STAR — Ethnocentric display */
+.iw--main {
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: clamp(3.8rem, 11.5vw, 9rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 0.95;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+/* Studio — Brittany Signature Script */
+.iw--script {
+  font-family: 'BrittanySignature', cursive;
+  font-weight: 400;
+  font-size: clamp(3.5rem, 10vw, 7.5rem);
+  color: #ffffff;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  /* Signature scripts have tall ascenders and long descenders that
+     overflow the cap/baseline. Padding expands the border-box so
+     clip-path: inset(0 0% 0 0) reveals the full glyph set. */
+  padding-top: 0.45em;
+  padding-bottom: 0.5em;
+  padding-left:  0.05em;
+  padding-right: 0.05em;
+}
+
+
+/* ---- STAR ICON ------------------------------------------- */
+.intro__star-icon {
+  display: inline-block;
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 0.2em;
+  /* Layered glow for a luminous, premium feel */
+  filter:
+    drop-shadow(0 0 4px  rgba(255, 255, 255, 1.0))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.55))
+    drop-shadow(0 0 28px rgba(255, 255, 255, 0.22));
+  will-change: transform, opacity;
+  /* Hidden initially — GSAP controls */
+  opacity: 0;
+}
+
+
+/* ---- AMBIENT GLOW ---------------------------------------- */
+/* Soft center light that fades in once the logo is complete */
+.intro__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 65% 45% at 50% 50%,
+    rgba(255, 255, 255, 0.042) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  will-change: opacity;
+}
+
+
+/* ---- PROGRESS BAR ---------------------------------------- */
+/* Thin decorative line that fills as the sequence plays */
+.intro__bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 0;
+  background: linear-gradient(
+    90deg,
+    transparent    0%,
+    rgba(255, 255, 255, 0.18) 15%,
+    rgba(255, 255, 255, 0.18) 85%,
+    transparent  100%
+  );
+  will-change: width;
+}
+
+
+/* ---- BODY SCROLL LOCK ------------------------------------ */
+body.intro-active {
+  overflow: hidden;
+}

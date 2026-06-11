@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Star Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/intro.css">
+  <!-- GSAP — loaded before deferred scripts so it's available to intro.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="js/intro.js" defer></script>
+</head>
+<body>
+
+  <!-- ======================================================
+       INTRO OVERLAY
+       Rendered first; removed from DOM after animation ends.
+       All timing lives in js/intro.js → TIMING object.
+  ====================================================== -->
+  <div id="intro" class="intro" aria-hidden="true">
+
+    <div class="intro__logo">
+
+      <!-- "BLACK" — wipes in first -->
+      <div class="intro__row">
+        <span class="iw iw--main" id="iw-black">BLACK</span>
+      </div>
+
+      <!-- "STAR" — more dramatic entrance -->
+      <div class="intro__row">
+        <span class="iw iw--main" id="iw-star">STAR</span>
+      </div>
+
+      <!-- "Studio" script + star icon -->
+      <div class="intro__row intro__row--studio">
+        <span class="iw iw--script" id="iw-studio">Studio</span>
+        <!-- Star accent — pops in last with glow -->
+        <span class="intro__star-icon" id="intro-star">&#9734;</span>
+      </div>
+
+    </div>
+
+    <!-- Ambient center glow — fades in on logo completion -->
+    <div class="intro__glow" id="intro-glow"></div>
+
+    <!-- Decorative progress line along the bottom -->
+    <div class="intro__bar" id="intro-bar"></div>
+
+  </div>
+
+
+  <!-- ======================================================
+       NAV
+  ====================================================== -->
+  <nav class="nav" id="nav">
+
+    <!-- Left: Builds -->
+    <ul class="nav__links nav__links--left">
+      <li><a href="#builds">Builds</a></li>
+    </ul>
+
+    <!-- Center: compact brand logo — revealed after intro exits -->
+    <div class="nav__center-logo" id="nav-logo" aria-label="Black Star Studio">
+      <span class="nav__logo-eth">BLACK</span>
+      <span class="nav__logo-eth">STAR</span>
+      <span class="nav__logo-script-row">
+        <span class="nav__logo-script">Studio</span>
+        <span class="nav__logo-star-icon">&#9734;</span>
+      </span>
+    </div>
+
+    <!-- Right: Services + Contact + mobile toggle -->
+    <div class="nav__right-group">
+      <ul class="nav__links nav__links--right">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav__menu-btn" aria-label="Menu">
+        <span></span><span></span>
+      </button>
+    </div>
+
+  </nav>
+
+
+  <!-- ======================================================
+       SECTION 1 — HERO INTRO
+  ====================================================== -->
+  <section class="hero" id="hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Black Star Studio</p>
+      <h1 class="hero__title">From Factory Finish<br>To Signature Presence.</h1>
+    </div>
+
+    <div class="hero__scroll-indicator">
+      <span>Scroll</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       HERO VISUAL — Large cinematic image / reel
+  ====================================================== -->
+
+
+  <!-- ======================================================
+       SECTION 2 — MATERIAL COLLECTION (infinite scroll banner)
+  ====================================================== -->
+  <section class="materials" id="materials">
+
+    <div class="materials__header">
+      <p class="section-label">The Material Collection</p>
+      <h2 class="materials__title">A Finish For Every Identity.</h2>
+    </div>
+
+    <div class="materials__stage">
+      <!-- Edge fades — images flow naturally in and out -->
+      <div class="materials__fade materials__fade--l"></div>
+      <div class="materials__fade materials__fade--r"></div>
+
+      <div class="materials__track" id="materials-track">
+
+        <!-- Set 1 — original -->
+        <div class="materials__set">
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(1).jpg"  alt="Silver Sunset Matte" loading="lazy"></div><p class="mat-card__name">Silver Sunset Matte</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(2).jpg"  alt="Burnt Maroon" loading="lazy"></div><p class="mat-card__name">Burnt Maroon</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(3).jpg"  alt="Black Gold" loading="lazy"></div><p class="mat-card__name">Black Gold</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(4).jpg"  alt="Crimson Red" loading="lazy"></div><p class="mat-card__name">Crimson Red</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(5).jpg"  alt="Wild Orange" loading="lazy"></div><p class="mat-card__name">Wild Orange</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(6).jpg"  alt="True Nardo Grey" loading="lazy"></div><p class="mat-card__name">True Nardo Grey</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(7).jpg"  alt="Rosaline Satin" loading="lazy"></div><p class="mat-card__name">Rosaline Satin</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(8).jpg"  alt="Military Green" loading="lazy"></div><p class="mat-card__name">Military Green</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(9).jpg"  alt="Purple Indigo Malachite" loading="lazy"></div><p class="mat-card__name">Purple Indigo Malachite</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(10).jpg" alt="Surf Blue" loading="lazy"></div><p class="mat-card__name">Surf Blue</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(11).jpg" alt="Teal Neon Lapis" loading="lazy"></div><p class="mat-card__name">Teal Neon Lapis</p></div>
+        </div>
+
+        <!-- Set 2 — duplicate for seamless loop (hidden on mobile) -->
+        <div class="materials__set" aria-hidden="true">
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(1).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Silver Sunset Matte</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(2).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Burnt Maroon</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(3).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Black Gold</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(4).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Crimson Red</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(5).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Wild Orange</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(6).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">True Nardo Grey</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(7).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Rosaline Satin</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(8).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Military Green</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(9).jpg"  alt="" loading="lazy"></div><p class="mat-card__name">Purple Indigo Malachite</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(10).jpg" alt="" loading="lazy"></div><p class="mat-card__name">Surf Blue</p></div>
+          <div class="mat-card"><div class="mat-card__img"><img src="wrap(11).jpg" alt="" loading="lazy"></div><p class="mat-card__name">Teal Neon Lapis</p></div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+
+
+  <!-- ======================================================
+       SECTION 3 — FINISH TECHNOLOGY
+  ====================================================== -->
+  <section class="finish-tech" id="finish-tech">
+    <div class="finish-tech__inner">
+
+      <!-- Image side: Lamborghini PPF infographic -->
+      <div class="finish-tech__visual">
+        <div class="finish-tech__frame">
+          <div class="finish-tech__spotlight"></div>
+          <img
+            src="last.png"
+            alt="PPF and wrap protection technology breakdown"
+            class="finish-tech__img"
+          >
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 4 — CINEMATIC REVEAL
+  ====================================================== -->
+  <section class="reveal" id="reveal">
+    <div class="reveal__grid">
+
+      <!-- Left video — sits slightly lower -->
+      <div class="reveal__col reveal__col--left">
+        <div class="reveal__video-wrap">
+          <video class="reveal__video" muted loop playsinline preload="metadata">
+            <source src="video(1).mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- Center editorial text -->
+      <div class="reveal__col reveal__col--center">
+        <div class="reveal__text">
+          <p class="section-label reveal__label">The Reveal</p>
+          <h2 class="reveal__heading">The Moment<br>Everything Changes.</h2>
+          <p class="reveal__body">From the final cover to the first look — every transformation deserves an entrance.</p>
+        </div>
+      </div>
+
+      <!-- Right video — sits slightly higher -->
+      <div class="reveal__col reveal__col--right">
+        <div class="reveal__video-wrap">
+          <video class="reveal__video" muted loop playsinline preload="metadata">
+            <source src="video(2).mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       TRUSTED BRANDS BANNER
+  ====================================================== -->
+  <section class="brands" id="brands" aria-label="Trusted material partners">
+
+    <div class="brands__label-bar">
+      <span class="brands__label-rule" aria-hidden="true"></span>
+      <p class="brands__label-text">MATERIAL PARTNERS</p>
+      <span class="brands__label-rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="brands__track-wrap">
+      <div class="brands__track">
+
+        <div class="brands__set">
+          <div class="brands__item"><img src="Banner/3m-red.svg"               alt="3M"          class="brands__logo"></div>
+          <div class="brands__item"><img src="Banner/HEXIS-Canada-logo.svg"    alt="HEXIS Canada"   class="brands__logo brands__logo--wide"></div>
+          <div class="brands__item"><img src="Banner/stek-emblem-white.svg"    alt="STEK"           class="brands__logo brands__logo--square"></div>
+          <div class="brands__item"><img src="Banner/suntek-logo.svg"          alt="SunTek"         class="brands__logo brands__logo--wide"></div>
+          <div class="brands__item"><img src="Teckwrap.avif"                   alt="Teckwrap"       class="brands__logo brands__logo--wide brands__logo--multiply"></div>
+          <div class="brands__item"><img src="tmp_i320r76.Avif"                alt="NFR"            class="brands__logo brands__logo--wide brands__logo--lg"></div>
+          <div class="brands__item"><img src="orafol-logo.AVIF"                alt="Orafol"         class="brands__logo brands__logo--wide"></div>
+        </div>
+
+        <div class="brands__set" aria-hidden="true">
+          <div class="brands__item"><img src="Banner/3m-red.svg"               alt="" class="brands__logo"></div>
+          <div class="brands__item"><img src="Banner/HEXIS-Canada-logo.svg"    alt="" class="brands__logo brands__logo--wide"></div>
+          <div class="brands__item"><img src="Banner/stek-emblem-white.svg"    alt="" class="brands__logo brands__logo--square"></div>
+          <div class="brands__item"><img src="Banner/suntek-logo.svg"          alt="" class="brands__logo brands__logo--wide"></div>
+          <div class="brands__item"><img src="Teckwrap.avif"                   alt="" class="brands__logo brands__logo--wide brands__logo--multiply"></div>
+          <div class="brands__item"><img src="tmp_i320r76.Avif"                alt="" class="brands__logo brands__logo--wide brands__logo--lg"></div>
+          <div class="brands__item"><img src="orafol-logo.AVIF"                alt="" class="brands__logo brands__logo--wide"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 5 — SERVICES
+  ====================================================== -->
+  <section class="services" id="services">
+    <div class="services__header">
+      <p class="section-label">What We Do</p>
+      <h2 class="services__title">Services</h2>
+    </div>
+
+    <div class="services__grid">
+
+      <div class="service-card">
+        <div class="service-card__number">01</div>
+        <h3 class="service-card__title">Custom Builds</h3>
+        <p class="service-card__desc">
+          <!-- PLACEHOLDER -->
+          [Description — full ground-up custom vehicle builds, crafted from concept to completion around the client's vision.]
+        </p>
+        <span class="service-card__arrow">→</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card__number">02</div>
+        <h3 class="service-card__title">Performance Upgrades</h3>
+        <p class="service-card__desc">
+          <!-- PLACEHOLDER -->
+          [Description — precision engine, suspension, and drivetrain upgrades engineered for real-world performance.]
+        </p>
+        <span class="service-card__arrow">→</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card__number">03</div>
+        <h3 class="service-card__title">Exterior Styling</h3>
+        <p class="service-card__desc">
+          <!-- PLACEHOLDER -->
+          [Description — custom body kits, aero packages, and full exterior transformation work.]
+        </p>
+        <span class="service-card__arrow">→</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card__number">04</div>
+        <h3 class="service-card__title">Interior Details</h3>
+        <p class="service-card__desc">
+          <!-- PLACEHOLDER -->
+          [Description — bespoke interior crafting, custom upholstery, and refined cabin transformations.]
+        </p>
+        <span class="service-card__arrow">→</span>
+      </div>
+
+      <div class="service-card">
+        <div class="service-card__number">05</div>
+        <h3 class="service-card__title">Paint / Wrap / Protection</h3>
+        <p class="service-card__desc">
+          <!-- PLACEHOLDER -->
+          [Description — custom paint, vinyl wraps, PPF, and ceramic coating — finish work that defines the build.]
+        </p>
+        <span class="service-card__arrow">→</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       OUR WORK — Portfolio slider
+  ====================================================== -->
+  <section class="our-work" id="our-work">
+    <div class="our-work__inner">
+
+      <div class="our-work__header">
+        <p class="section-label">SELECTED BUILDS</p>
+        <h2 class="our-work__heading">OUR WORK.</h2>
+        <p class="our-work__sub">A collection of vehicles transformed through color, finish, and individual direction.</p>
+      </div>
+
+      <div class="our-work__stage">
+        <div class="our-work__track-wrap" id="ow-wrap">
+          <div class="our-work__track" id="ow-track">
+            <!-- Cards injected by js/main.js — BUILDS array -->
+          </div>
+        </div>
+        <button class="our-work__btn our-work__btn--prev" id="ow-prev" aria-label="Previous build">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="our-work__btn our-work__btn--next" id="ow-next" aria-label="Next build">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 7 — WHAT MAKES US DIFFERENT
+  ====================================================== -->
+  <section class="difference" id="difference">
+    <div class="difference__inner">
+
+      <div class="difference__header">
+        <p class="section-label">The Black Star Standard</p>
+        <h2 class="difference__heading">What Makes<br>Us Different.</h2>
+        <p class="difference__intro">Every transformation is approached with intention — from the material selected to the final detail revealed.</p>
+      </div>
+
+      <div class="difference__grid">
+
+        <div class="difference__item">
+          <span class="difference__num">01</span>
+          <div class="difference__body">
+            <h3 class="difference__title">Detail-Driven Execution</h3>
+            <p class="difference__desc">Every edge, finish, and surface is handled with precision.</p>
+          </div>
+        </div>
+
+        <div class="difference__item">
+          <span class="difference__num">02</span>
+          <div class="difference__body">
+            <h3 class="difference__title">Premium Materials</h3>
+            <p class="difference__desc">Carefully selected films and protection products built for appearance and durability.</p>
+          </div>
+        </div>
+
+        <div class="difference__item">
+          <span class="difference__num">03</span>
+          <div class="difference__body">
+            <h3 class="difference__title">Design With Identity</h3>
+            <p class="difference__desc">Every vehicle is treated as an individual build, not another repeated template.</p>
+          </div>
+        </div>
+
+        <div class="difference__item">
+          <span class="difference__num">04</span>
+          <div class="difference__body">
+            <h3 class="difference__title">A Complete Experience</h3>
+            <p class="difference__desc">From consultation to final reveal, every step is designed to feel professional and personal.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 8 — CLIENT REVIEWS
+  ====================================================== -->
+  <section class="reviews" id="reviews">
+
+    <div class="reviews__header">
+      <p class="section-label">Client Experiences</p>
+      <h2 class="reviews__heading">Trusted By Those<br>Who Expect More.</h2>
+    </div>
+
+    <div class="reviews__stage">
+      <button class="reviews__arrow reviews__arrow--prev" id="reviews-prev" aria-label="Previous review">&#8592;</button>
+
+      <div class="reviews__overflow" id="reviews-overflow">
+        <div class="reviews__track" id="reviews-track">
+
+          <article class="review-card">
+            <span class="review-card__mark">&ldquo;</span>
+            <p class="review-card__text">The attention to detail completely changed the presence of the vehicle. Every panel was treated with a level of care I didn't expect — the result was beyond what I had imagined.</p>
+            <footer class="review-card__author">
+              <span class="review-card__name">— CLIENT NAME</span>
+              <span class="review-card__vehicle">Vehicle &middot; Service</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <span class="review-card__mark">&ldquo;</span>
+            <p class="review-card__text">From the first consultation to the final reveal, the entire experience felt personal and professional. They understood exactly what I wanted and delivered something even better.</p>
+            <footer class="review-card__author">
+              <span class="review-card__name">— CLIENT NAME</span>
+              <span class="review-card__vehicle">Vehicle &middot; Service</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <span class="review-card__mark">&ldquo;</span>
+            <p class="review-card__text">The materials, the craftsmanship, the finish — everything was at a different level. You can feel the quality in every surface. This wasn't just a wrap, it was a transformation.</p>
+            <footer class="review-card__author">
+              <span class="review-card__name">— CLIENT NAME</span>
+              <span class="review-card__vehicle">Vehicle &middot; Service</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <span class="review-card__mark">&ldquo;</span>
+            <p class="review-card__text">I've had work done elsewhere before, but the Black Star experience was something else entirely. The process was smooth, the communication was clear, and the result speaks for itself.</p>
+            <footer class="review-card__author">
+              <span class="review-card__name">— CLIENT NAME</span>
+              <span class="review-card__vehicle">Vehicle &middot; Service</span>
+            </footer>
+          </article>
+
+          <article class="review-card">
+            <span class="review-card__mark">&ldquo;</span>
+            <p class="review-card__text">Every detail was considered. The finish they achieved elevated the vehicle into something I'm genuinely proud to drive. Worth every dollar — and worth the wait.</p>
+            <footer class="review-card__author">
+              <span class="review-card__name">— CLIENT NAME</span>
+              <span class="review-card__vehicle">Vehicle &middot; Service</span>
+            </footer>
+          </article>
+
+        </div>
+      </div>
+
+      <button class="reviews__arrow reviews__arrow--next" id="reviews-next" aria-label="Next review">&#8594;</button>
+    </div>
+
+    <div class="reviews__dots" id="reviews-dots" aria-hidden="true"></div>
+
+  </section>
+
+
+  <!-- ======================================================
+       CINEMATIC BREAK — between reviews and contact
+  ====================================================== -->
+  <section class="cin-break" id="cin-break" aria-label="Black Star Studio commitment">
+    <!-- Mobile: absolutely-positioned img avoids broken fixed-bg on iOS -->
+    <div class="cin-break__bg-mobile" aria-hidden="true">
+      <img src="Rolls_royce.jpg" alt="" class="cin-break__bg-img">
+    </div>
+    <div class="cin-break__overlay" aria-hidden="true"></div>
+    <div class="cin-break__content">
+      <p class="cin-break__sub">ONE CALL, VISIT, OR CLICK AWAY.</p>
+      <p class="cin-break__headline">YOUR SATISFACTION<br>IS OUR PRIORITY.</p>
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 9 — CONTACT
+  ====================================================== -->
+  <section class="contact" id="contact">
+    <div class="contact__inner">
+
+      <!-- LEFT: photo card + info box -->
+      <div class="contact__info">
+        <div class="contact__photo">
+          <img src="Contact.jpg" alt="Black Star Studio build" class="contact__photo-img">
+        </div>
+        <div class="contact__info-box">
+          <p class="contact__info-heading">CONTACT US</p>
+          <p class="contact__intro">Tell us about your vehicle, your vision, and the finish you have in mind. Our team will help you explore the right direction for your build.</p>
+          <div class="contact__details">
+
+            <div class="contact__detail">
+              <span class="contact__detail-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </span>
+              <span class="contact__detail-value">Monday – Saturday&nbsp;&nbsp;9:00am – 7:30pm</span>
+            </div>
+
+            <a href="tel:6479729727" class="contact__detail">
+              <span class="contact__detail-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.5 19.79 19.79 0 0 1 1.58 5a2 2 0 0 1 1.95-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.27a16 16 0 0 0 6 6l.72-.72a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+              </span>
+              <span class="contact__detail-value">647-972-9727</span>
+            </a>
+
+            <a href="mailto:placeholder@blackstarstudio.com" class="contact__detail">
+              <span class="contact__detail-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <span class="contact__detail-value">[Email Placeholder]</span>
+            </a>
+
+            <a href="https://instagram.com/blackstarstudioo" target="_blank" rel="noopener noreferrer" class="contact__detail">
+              <span class="contact__detail-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </span>
+              <span class="contact__detail-value">@blackstarstudioo</span>
+            </a>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: heading above the form -->
+      <div class="contact__form-wrap">
+        <h2 class="contact__heading">Contact Our<br>Specialist Team.</h2>
+        <form class="contact__form" id="contact-form" novalidate>
+
+          <div class="form-row form-row--half">
+            <div class="form-field">
+              <label class="form-label" for="cf-name">Full Name</label>
+              <input class="form-input" type="text" id="cf-name" name="name" autocomplete="name" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="cf-phone">Phone Number</label>
+              <input class="form-input" type="tel" id="cf-phone" name="phone" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="cf-email">Email Address</label>
+            <input class="form-input" type="email" id="cf-email" name="email" autocomplete="email" required>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="cf-vehicle">Vehicle Make &amp; Model</label>
+            <input class="form-input" type="text" id="cf-vehicle" name="vehicle">
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="cf-service">Service Interested In</label>
+            <div class="form-select-wrap">
+              <select class="form-input form-select" id="cf-service" name="service">
+                <option value="" disabled selected>Select a service</option>
+                <option value="wrap">Vehicle Wrap</option>
+                <option value="ppf">Paint Protection Film</option>
+                <option value="ceramic">Ceramic Coating</option>
+                <option value="styling">Custom Styling</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="cf-vision">Tell Us About Your Vision</label>
+            <textarea class="form-input form-textarea" id="cf-vision" name="vision" rows="5" placeholder="Describe your vehicle, the direction you have in mind, and any specific details..."></textarea>
+          </div>
+
+          <button type="submit" class="contact__submit">Start Your Project</button>
+
+        </form>
+
+        <div class="contact__success" id="contact-success">
+          <span class="contact__success-icon">&#10003;</span>
+          <p class="contact__success-heading">Message Received.</p>
+          <p class="contact__success-body">Thank you for reaching out. A member of our team will be in touch shortly to discuss your build.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 10 — STUDIO IMAGE (Where The Transformation Happens)
+  ====================================================== -->
+  <section class="studio-image" id="studio">
+    <div class="studio-image__inner">
+
+      <div class="studio-image__visual">
+        <!--
+          REPLACE with a real shop / installation / studio image:
+          <img src="studio-shot.jpg" alt="Inside Black Star Studio">
+        -->
+        <div class="placeholder placeholder--large"><span>Studio / Installation Image</span></div>
+      </div>
+
+      <div class="studio-image__content">
+        <p class="section-label">Inside Black Star</p>
+        <h2 class="studio-image__heading">Where The<br>Transformation Happens.</h2>
+        <p class="studio-image__body">Every transformation begins with a vision and ends with a presence that feels completely its own.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       SECTION 11 — WHY CHOOSE BLACK STAR
+  ====================================================== -->
+  <section class="why-bss" id="why-bss">
+    <div class="why-bss__inner">
+
+      <div class="why-bss__visual">
+        <div class="why-bss__img-wrap">
+          <img src="whyblackstar.jpg" alt="Black Star Studio craftsmanship">
+        </div>
+      </div>
+
+      <div class="why-bss__content">
+        <p class="section-label">Why Black Star</p>
+        <h2 class="why-bss__heading">Your Vehicle Deserves More Than a Standard Finish.</h2>
+        <p class="why-bss__intro">We combine visual direction, skilled installation, premium materials, and thoughtful service to create transformations built around the vehicle and its owner.</p>
+        <div class="why-bss__points">
+          <div class="why-bss__point">
+            <span class="why-bss__point-num">01</span>
+            <span class="why-bss__point-text">Personalized Consultation</span>
+          </div>
+          <div class="why-bss__point">
+            <span class="why-bss__point-num">02</span>
+            <span class="why-bss__point-text">Skilled Installation</span>
+          </div>
+          <div class="why-bss__point">
+            <span class="why-bss__point-num">03</span>
+            <span class="why-bss__point-text">Premium Finish Options</span>
+          </div>
+          <div class="why-bss__point">
+            <span class="why-bss__point-num">04</span>
+            <span class="why-bss__point-text">Aftercare Guidance</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       GOOGLE MAPS
+       Replace MAP_CONFIG in js/main.js with the real address
+       and coordinates once confirmed.
+  ====================================================== -->
+  <section class="gmap" id="map" aria-label="Studio location map">
+    <div class="gmap__container">
+      <a
+        class="gmap__open-btn"
+        id="gmap-open-btn"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open Black Star Studio in Google Maps"
+      >OPEN IN MAPS &#8599;</a>
+      <iframe
+        id="gmap-iframe"
+        class="gmap__iframe"
+        src="about:blank"
+        style="border:0;"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Black Star Studio on Google Maps"
+      ></iframe>
+    </div>
+  </section>
+
+
+  <!-- ======================================================
+       FOOTER
+  ====================================================== -->
+  <footer class="footer" id="footer">
+    <div class="footer__inner">
+
+      <!-- ── THREE-COLUMN MAIN AREA ─────────────────────── -->
+      <div class="footer__columns">
+
+        <!-- LEFT: Brand + Contact -->
+        <div class="footer__col footer__col--brand">
+
+          <div class="footer__logo-block">
+            <span class="footer__logo-eth">BLACK</span>
+            <span class="footer__logo-eth">STAR</span>
+            <div class="footer__logo-script-row">
+              <span class="footer__logo-script">Studio</span>
+              <span class="footer__logo-star">&#9734;</span>
+            </div>
+          </div>
+
+          <p class="footer__brand-stmt">Every vehicle is more than transportation.<br>It is identity, presence, and personal expression.</p>
+
+          <div class="footer__contact-panel">
+            <p class="footer__contact-heading">CONTACT US</p>
+            <ul class="footer__contact-list">
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+                <span>[Business Hours Placeholder]</span>
+              </li>
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+                <a href="tel:placeholder">[Phone Placeholder]</a>
+              </li>
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                <a href="mailto:placeholder@blackstarstudio.com">[Email Placeholder]</a>
+              </li>
+              <li class="footer__contact-item">
+                <span class="footer__contact-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <span>55 Torbarrie Rd #10, North York, ON M3L 1G5</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- CENTER: Menu -->
+        <div class="footer__col footer__col--menu">
+          <p class="footer__col-heading">MENU</p>
+          <nav class="footer__nav" aria-label="Footer navigation">
+            <a href="#" class="footer__nav-btn"><span>HOME</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="#" class="footer__nav-btn"><span>ABOUT US</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="#builds" class="footer__nav-btn"><span>SIGNATURE BUILDS</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="#services" class="footer__nav-btn"><span>SERVICES</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="#" class="footer__nav-btn"><span>IMPORTFEST</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="#contact" class="footer__nav-btn"><span>CONTACT</span><span class="footer__nav-btn-arrow" aria-hidden="true">&#8599;</span></a>
+          </nav>
+        </div>
+
+        <!-- RIGHT: Services -->
+        <div class="footer__col footer__col--services">
+          <p class="footer__col-heading">SERVICES</p>
+          <div class="footer__service-list">
+
+            <div class="footer__service-item">
+              <button class="footer__service-btn" aria-expanded="false">
+                <span>VEHICLE WRAPS</span>
+                <span class="footer__service-plus" aria-hidden="true">+</span>
+              </button>
+              <div class="footer__service-desc">Full and partial colour change wraps using premium cast and calendered vinyl films.</div>
+            </div>
+
+            <div class="footer__service-item">
+              <button class="footer__service-btn" aria-expanded="false">
+                <span>PAINT PROTECTION</span>
+                <span class="footer__service-plus" aria-hidden="true">+</span>
+              </button>
+              <div class="footer__service-desc">PPF installations that shield your paint from chips, scratches, and UV degradation.</div>
+            </div>
+
+            <div class="footer__service-item">
+              <button class="footer__service-btn" aria-expanded="false">
+                <span>CERAMIC COATING</span>
+                <span class="footer__service-plus" aria-hidden="true">+</span>
+              </button>
+              <div class="footer__service-desc">Professional-grade ceramic coatings for long-term hydrophobic gloss protection.</div>
+            </div>
+
+            <div class="footer__service-item">
+              <button class="footer__service-btn" aria-expanded="false">
+                <span>CUSTOM STYLING</span>
+                <span class="footer__service-plus" aria-hidden="true">+</span>
+              </button>
+              <div class="footer__service-desc">Bespoke design work — from concept to execution — built around your vehicle.</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /footer__columns -->
+
+      <!-- ── BOTTOM BAR ──────────────────────────────────── -->
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 BLACK STAR STUDIO</p>
+        <div class="footer__socials">
+          <a href="#" class="footer__social" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="footer__social" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.97a8.27 8.27 0 0 0 4.83 1.55V7.07a4.85 4.85 0 0 1-1.06-.38z"/></svg>
+          </a>
+          <a href="#" class="footer__social" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7s-.3-2-1.2-2.8C20.7 3 19.4 3 18.8 2.9 16.5 2.7 12 2.7 12 2.7s-4.5 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.3v2c0 2.2.3 4.3.3 4.3s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.4 21.9 12 22 12 22s4.5 0 6.8-.4c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8S23.3 15.5 23.3 13.3v-2C23.3 9.1 23 7 23 7zM9.7 15.5V8.4l8.1 3.6-8.1 3.5z"/></svg>
+          </a>
+          <a href="#" class="footer__social" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.1C24 5.4 18.6 0 12 0S0 5.4 0 12.1c0 6 4.4 11 10.1 11.9v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-1.9.9-1.9 1.9v2.2h3.3l-.5 3.5h-2.8V24C19.6 23.1 24 18.1 24 12.1z"/></svg>
+          </a>
+        </div>
+        <div class="footer__legal">
+          <a href="#">PRIVACY POLICY</a>
+          <a href="#">TERMS OF SERVICE</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
