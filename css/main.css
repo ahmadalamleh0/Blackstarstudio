@@ -482,7 +482,7 @@ button {
 .materials__track {
   display: flex;
   will-change: transform;
-  animation: matScroll 10s linear infinite;
+  animation: matScroll 5s linear infinite;
   cursor: grab;
 }
 
@@ -737,16 +737,17 @@ button {
   object-position: center 55%;
 }
 
-/* Subtle bottom gradient — only enough to keep text readable */
+/* Bottom gradient — fades image into the dark section below */
 .finish-tech__frame::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.08) 0%,
-    rgba(0, 0, 0, 0.10) 50%,
-    rgba(0, 0, 0, 0.62) 100%
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.12) 42%,
+    rgba(0, 0, 0, 0.72) 78%,
+    rgba(0, 0, 0, 0.95) 100%
   );
   pointer-events: none;
 }
@@ -812,6 +813,21 @@ button {
     height: auto;
     min-height: 0;
     overflow: visible;
+    position: relative;
+  }
+
+  /* Fade-to-black at the bottom of the Lamborghini image on mobile */
+  .finish-tech::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--black));
+    pointer-events: none;
+    z-index: 1;
   }
 
   /* Break out of absolute positioning */
@@ -1014,21 +1030,32 @@ button {
 
 /* ── Mobile: stacked column ─────────────────────────────── */
 @media (max-width: 768px) {
-  .svc-showcase__grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: none;
+  .svc-showcase {
+    overflow-x: clip;
   }
 
-  .svc-card:nth-child(1),
-  .svc-card:nth-child(2),
-  .svc-card:nth-child(3),
-  .svc-card:nth-child(4),
-  .svc-card:nth-child(5),
-  .svc-card:nth-child(6) {
-    grid-column: auto;
-    grid-row: auto;
-    aspect-ratio: 16 / 9;
+  .svc-showcase__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
   }
+
+  /* All cards: full-width fixed height, clear any desktop grid props */
+  .svc-card {
+    height: 260px;
+    width: 100%;
+    flex: none;
+    aspect-ratio: unset;
+    border-radius: 10px;
+  }
+
+  /* Hide Black Out on mobile */
+  .svc-card:nth-child(5) { display: none; }
+
+  /* Decals & Stripes (7th) before Commercial Wrap (6th) */
+  .svc-card:nth-child(6) { order: 6; }
+  .svc-card:nth-child(7) { order: 5; }
 }
 
 
@@ -2055,6 +2082,10 @@ button {
 
 /* ── Mobile: horizontal swipe ────────────────────────────── */
 @media (max-width: 768px) {
+  .gr-reviews {
+    overflow-x: clip;
+  }
+
   .gr-summary {
     flex-direction: column;
     align-items: flex-start;
@@ -2657,11 +2688,11 @@ a.contact__detail:hover .contact__detail-value { color: var(--gold); }
   margin: 0 auto;
 }
 
-/* ---- Three-column layout --------------------------------- */
+/* ---- Two-column layout ----------------------------------- */
 .footer__columns {
   display: grid;
-  grid-template-columns: 1.7fr 1fr 1fr;
-  gap: clamp(3rem, 5vw, 5rem);
+  grid-template-columns: 1.7fr 1fr;
+  gap: clamp(3rem, 6vw, 7rem);
   padding-bottom: var(--space-xl);
 }
 
@@ -3120,6 +3151,20 @@ a.contact__detail:hover .contact__detail-value { color: var(--gold); }
   padding: var(--space-xl) var(--gutter);
   background: var(--black);
   overflow: hidden;
+  position: relative;
+}
+
+/* Gradient lip blending from finish-tech into reveal */
+.reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  background: linear-gradient(to bottom, var(--black) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .reveal__grid {
@@ -3344,6 +3389,7 @@ a.contact__detail:hover .contact__detail-value { color: var(--gold); }
   .reveal__video-wrap { width: 100%; }
 
   /* ── Difference ─────────────────────────────────────────── */
+  .diff-new__visual { overflow: hidden; }
 
   /* ── Why BSS ─────────────────────────────────────────────── */
   .why-bss__img-wrap {
@@ -3382,8 +3428,8 @@ a.contact__detail:hover .contact__detail-value { color: var(--gold); }
   .gmap__open-btn { opacity: 1; }
 
   /* ── Footer ──────────────────────────────────────────────── */
-  .footer__columns    { grid-template-columns: 1fr 1fr; }
-  .footer__col--brand { grid-column: 1 / -1; }
+  .footer__columns    { grid-template-columns: 1fr; }
+  .footer__col--brand { grid-column: auto; }
   .footer__bottom     { gap: 1.25rem; }
 }
 
@@ -3412,9 +3458,7 @@ a.contact__detail:hover .contact__detail-value { color: var(--gold); }
   /* Contact form */
   .contact__form-wrap { padding: 1.25rem; }
 
-  /* Footer — fully stacked */
-  .footer__columns    { grid-template-columns: 1fr; }
-  .footer__col--brand { grid-column: auto; }
+  /* Footer — single column retained from 768px */
   .footer__bottom     {
     flex-direction: column;
     align-items: center;

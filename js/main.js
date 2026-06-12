@@ -31,11 +31,8 @@ const fadeTargets = [
   '.contact__form-wrap',
   '.studio-image__visual',
   '.studio-image__content',
-  '.why-bss__visual',
-  '.why-bss__content',
   '.footer__col--brand',
   '.footer__col--menu',
-  '.footer__col--services',
 ];
 
 const fadeObserver = new IntersectionObserver(
