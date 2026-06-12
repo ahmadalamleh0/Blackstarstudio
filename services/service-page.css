@@ -1,0 +1,175 @@
+/* ============================================================
+   BLACK STAR STUDIO — SERVICE COMING SOON PAGE
+   ============================================================ */
+
+/* ---- Local fonts ----------------------------------------- */
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url('../ethnocentric/Ethnocentric-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'BrittanySignature';
+  src: url('../brittany-signature-script/BrittanySignatureScript.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---- Reset ----------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { font-size: 16px; }
+
+body {
+  background: #080808;
+  color: #ede8e1;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---- Root shell ------------------------------------------ */
+#service-root {
+  display: flex;
+  min-height: 100svh;
+  min-height: 100vh;
+}
+
+/* ---- Page wrapper ---------------------------------------- */
+.sp-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100svh;
+  min-height: 100vh;
+  width: 100%;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sp-page--in { opacity: 1; }
+
+/* ---- Logo ------------------------------------------------- */
+.sp-logo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  user-select: none;
+  margin-bottom: clamp(3.5rem, 9vh, 7rem);
+  transition: opacity 0.2s;
+}
+
+.sp-logo-link:hover { opacity: 0.65; }
+
+.sp-logo-black {
+  display: block;
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: clamp(0.85rem, 2.2vw, 1.35rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #ede8e1;
+  line-height: 1.1;
+}
+
+.sp-logo-star {
+  display: block;
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: clamp(1.4rem, 3.8vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  background: linear-gradient(135deg, #ffffff 0%, #c8a96e 45%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sp-logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28em;
+  margin-top: 0.1em;
+}
+
+.sp-logo-script {
+  font-family: 'BrittanySignature', cursive;
+  font-size: clamp(0.9rem, 2.2vw, 1.55rem);
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1;
+  padding-top: 0.12em;
+}
+
+.sp-logo-star-icon {
+  font-size: 0.5rem;
+  color: #c8a96e;
+  filter: drop-shadow(0 0 4px rgba(200, 169, 110, 0.55));
+  margin-bottom: 0.35em;
+}
+
+/* ---- Divider --------------------------------------------- */
+.sp-rule {
+  width: 40px;
+  height: 1px;
+  background: rgba(200, 169, 110, 0.35);
+  margin: 0 auto 2.5rem;
+}
+
+/* ---- Content --------------------------------------------- */
+.sp-service-name {
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: clamp(0.48rem, 1.4vw, 0.72rem);
+  font-weight: 400;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: #c8a96e;
+  margin-bottom: 1.75rem;
+}
+
+.sp-coming-soon {
+  font-family: 'Ethnocentric', sans-serif;
+  font-size: clamp(2.4rem, 9vw, 7rem);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  line-height: 1.05;
+  margin-bottom: clamp(2.5rem, 6vh, 4.5rem);
+}
+
+/* ---- Back link ------------------------------------------- */
+.sp-back {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  transition: color 0.25s;
+  white-space: nowrap;
+}
+
+.sp-back:hover { color: rgba(255, 255, 255, 0.65); }
+
+/* ---- Responsive ------------------------------------------ */
+@media (max-width: 480px) {
+  .sp-coming-soon {
+    letter-spacing: 0.05em;
+  }
+}

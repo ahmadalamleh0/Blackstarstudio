@@ -773,7 +773,7 @@ const SERVICES = [
     image:  'Wrap(1).jpeg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #231e14 0%, #0d0b08 100%)',
-    link:   '#contact',
+    link:   '/services/vehicle-wrapping',
   },
   {
     title:  'PAINT PROTECTION FILM',
@@ -781,7 +781,7 @@ const SERVICES = [
     image:  'PPF.jpeg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #0f1020 0%, #07080e 100%)',
-    link:   '#contact',
+    link:   '/services/paint-protection-film',
   },
   {
     title:  'CERAMIC COATING',
@@ -789,7 +789,7 @@ const SERVICES = [
     image:  'Ceramic_coating.jpg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #141420 0%, #09090d 100%)',
-    link:   '#contact',
+    link:   '/services/ceramic-coating',
   },
   {
     title:  'TINTING',
@@ -797,7 +797,7 @@ const SERVICES = [
     image:  'tinting.jpg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #0d1616 0%, #070c0c 100%)',
-    link:   '#contact',
+    link:   '/services/tinting',
   },
   {
     title:  'BLACK OUT',
@@ -805,7 +805,7 @@ const SERVICES = [
     image:  'Black_out(2).jpg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #111111 0%, #050505 100%)',
-    link:   '#contact',
+    link:   '/services/black-out',
   },
   {
     title:  'COMMERCIAL WRAP',
@@ -813,7 +813,7 @@ const SERVICES = [
     image:  'commercial_wrap(2).jpg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #1c1610 0%, #0c0a08 100%)',
-    link:   '#contact',
+    link:   '/services/commercial-wrap',
   },
   {
     title:  'DECALS & STRIPES',
@@ -821,7 +821,7 @@ const SERVICES = [
     image:  'decals(2).jpg',
     imgPos: 'center center',
     bg:     'linear-gradient(140deg, #16101e 0%, #0b080f 100%)',
-    link:   '#contact',
+    link:   '/services/decals-stripes',
   },
 ];
 

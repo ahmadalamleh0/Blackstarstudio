@@ -96,6 +96,14 @@
   text-transform: uppercase;
 }
 
+/* STAR — white-to-gold-to-white gradient (matches service page logo) */
+#iw-star {
+  background: linear-gradient(135deg, #ffffff 0%, #c8a96e 45%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 
 /* Studio — Brittany Signature Script */
 .iw--script {
@@ -119,14 +127,14 @@
 .intro__star-icon {
   display: inline-block;
   font-size: clamp(1.6rem, 4vw, 3rem);
-  color: #ffffff;
+  color: #c8a96e;
   line-height: 1;
   margin-bottom: 0.2em;
-  /* Layered glow for a luminous, premium feel */
+  /* Gold layered glow — matches service page logo */
   filter:
-    drop-shadow(0 0 4px  rgba(255, 255, 255, 1.0))
-    drop-shadow(0 0 12px rgba(255, 255, 255, 0.55))
-    drop-shadow(0 0 28px rgba(255, 255, 255, 0.22));
+    drop-shadow(0 0 5px  rgba(200, 169, 110, 1.0))
+    drop-shadow(0 0 16px rgba(200, 169, 110, 0.6))
+    drop-shadow(0 0 36px rgba(200, 169, 110, 0.28));
   will-change: transform, opacity;
   /* Hidden initially — GSAP controls */
   opacity: 0;
