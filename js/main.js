@@ -21,12 +21,12 @@ const fadeTargets = [
   '.signature__details',
   '.finish-tech__frame',
   '.finish-tech__text',
+  '.svc-showcase__header',
   '.services__header',
   '.services__grid',
   /* New sections */
-  '.difference__header',
-  '.difference__item',
-  '.reviews__header',
+  '.diff-new__intro',
+  '.gr-reviews__header',
   '.contact__info',
   '.contact__form-wrap',
   '.studio-image__visual',
@@ -89,6 +89,41 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
 });
 
 
+/* ---- BRANDS MARQUEE: pixel-precise loop fix -------------- */
+(function () {
+  const track = document.querySelector('.brands__track');
+  const set   = document.querySelector('.brands__set');
+  if (!track || !set) return;
+
+  function calibrate() {
+    const w = set.getBoundingClientRect().width;
+    track.style.setProperty('--brands-w', `-${w}px`);
+    /* Restart animation so it picks up the new value immediately */
+    track.style.animation = 'none';
+    track.offsetHeight; // force reflow
+    track.style.animation = '';
+  }
+
+  /* Run once all images in the banner have loaded */
+  const imgs = [...track.querySelectorAll('img')];
+  let pending = imgs.filter(i => !i.complete).length;
+
+  if (pending === 0) {
+    calibrate();
+  } else {
+    function onLoad() { if (--pending <= 0) calibrate(); }
+    imgs.forEach(img => {
+      if (!img.complete) {
+        img.addEventListener('load',  onLoad, { once: true });
+        img.addEventListener('error', onLoad, { once: true });
+      }
+    });
+  }
+
+  window.addEventListener('resize', calibrate, { passive: true });
+})();
+
+
 /* ---- CINEMATIC REVEAL: fade-in + viewport autoplay ------- */
 (function () {
   const section = document.querySelector('.reveal');
@@ -118,20 +153,33 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   // Autoplay when video is in view, pause when not
   const videos = section.querySelectorAll('.reveal__video');
 
+  function tryPlay(video) {
+    const p = video.play();
+    if (p !== undefined) {
+      p.catch(() => {
+        // Retry once after a short delay (handles browser autoplay policy races)
+        setTimeout(() => video.play().catch(() => {}), 400);
+      });
+    }
+  }
+
   const videoObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.play().catch(() => {});
+          tryPlay(entry.target);
         } else {
           entry.target.pause();
         }
       });
     },
-    { threshold: 0.25 }
+    { threshold: 0.1 }
   );
 
-  videos.forEach(v => videoObserver.observe(v));
+  videos.forEach(v => {
+    v.muted = true; // ensure muted programmatically for Safari
+    videoObserver.observe(v);
+  });
 })();
 
 
@@ -172,74 +220,263 @@ window.swapPlaceholder = function (selector, html) {
 };
 
 
-/* ---- REVIEWS CAROUSEL ------------------------------------ */
+/* ---- WHAT MAKES US DIFFERENT: staggered reveal ----------- */
 (function () {
-  const overflow = document.getElementById('reviews-overflow');
-  const track    = document.getElementById('reviews-track');
-  const dotsWrap = document.getElementById('reviews-dots');
-  const prevBtn  = document.getElementById('reviews-prev');
-  const nextBtn  = document.getElementById('reviews-next');
-  if (!track) return;
+  const section = document.querySelector('.diff-new');
+  if (!section) return;
 
-  const cards = [...track.querySelectorAll('.review-card')];
-  const total = cards.length;
-  let current = 0;
+  const intro  = section.querySelector('.diff-new__intro');
+  const visual = section.querySelector('.diff-new__visual');
+  const points = [...section.querySelectorAll('.diff-new__point')];
 
-  /* Build progress dots */
-  cards.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'reviews__dot';
-    d.setAttribute('aria-label', `Review ${i + 1}`);
-    d.addEventListener('click', () => goTo(i));
-    dotsWrap.appendChild(d);
+  /* Apply animation classes */
+  if (intro)  intro.classList.add('diff-anim');
+  if (visual) visual.classList.add('diff-anim--visual');
+  points.forEach(p => p.classList.add('diff-anim'));
+
+  /* Stagger delays: intro 0ms, visual 180ms, points 380/520/660/800ms */
+  const delays = [0, 180, 380, 520, 660, 800];
+  [intro, visual, ...points].forEach((el, i) => {
+    if (!el) return;
+    el.style.transitionDelay = `${delays[i] || 0}ms`;
   });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('diff-in');
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  [intro, visual, ...points].forEach(el => { if (el) obs.observe(el); });
+})();
+
+
+/* ---- GOOGLE-STYLE REVIEWS -------------------------------- */
+
+/*
+ * REVIEW_CONFIG — update these when the real Google listing is confirmed.
+ * googleScore:     number string e.g. '4.9'  — null shows placeholder dashes
+ * googleCount:     number string e.g. '52'   — null shows placeholder dashes
+ * googleReviewUrl: paste the real Google Maps review URL here
+ */
+const REVIEW_CONFIG = {
+  googleScore:     null,
+  googleCount:     null,
+  googleReviewUrl: '#',
+};
+
+/*
+ * REVIEWS — add/edit entries here.
+ * All fields support null (omits that UI element).
+ * reviewDate: ISO string e.g. '2024-11-03' pulled from Google — null = hidden
+ */
+const REVIEWS = [
+  {
+    reviewerName:     'Aryo Lotfi',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'I recently had my car wrapped at Black Star Studios, and the entire experience was nothing short of exceptional. Their customer service is honestly top-tier — they respond to texts and calls almost instantly, and they make you feel genuinely taken care of from start to finish. I\'m extremely OCD with my car, and not once did they get impatient or dismissive. Instead, they went out of their way to help me with every small detail.',
+    reviewDate:       null,
+    vehicleOrService: 'Mercedes · Ceramic Coating',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Malika Said Khasan',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'Thank you so much Black Star Studio — your work is amazing. It turned out even better than I imagined. The first time the car was brought in was for a ceramic coat, which also turned out great. Once at the shop I was inspired by all the incredible work, and when I decided to wrap the car I knew exactly who to take it to. The owner took his time with the consultation to make sure I got exactly what I wanted.',
+    reviewDate:       null,
+    vehicleOrService: 'Vehicle Wrap · Ceramic Coating',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Howie Le',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'I would like to share my experience about Black Star Studio on their impressive quality of services and professionalism on getting my Maserati wrapped. Outstanding quality of materials used and I was very pleased with the outcome. Nothing but perfection. I highly recommend for those looking for quality and perfection — check out Black Star Studio and ask for Sharif, he\'s your guy.',
+    reviewDate:       null,
+    vehicleOrService: 'Maserati · Full Wrap',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Rohit Pardeshi',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'Really really happy with the results of our Moss Green wrapped Jeep Wrangler. This colour definitely turns heads! Best part of the experience was their customer service. Through and through, everyone made sure our questions were answered and that we left completely satisfied.',
+    reviewDate:       null,
+    vehicleOrService: 'Jeep Wrangler · Full Wrap',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'KPP',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'Finally decided to pull the trigger on a wrap. Owner was extremely helpful in colour choices and styles. Great recommendations and def knows his stuff. I dmed 5 other places but ended up at blackstar. Better pricing and better knowledge. No regrets. the excecution was impeccable and really shows professional work. This place has both great service and skills. I would be coming back and i cannot be more happier. Give this place a shot if you have doubts or are second guessing. You wont regret it. Guy even waited for my car to come off cold start before moving it. You wont find better service elsewhere. Satisafction guaranteed.',
+    reviewDate:       null,
+    vehicleOrService: 'Lexus IS 350 · Full Wrap',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Amir Khan',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'I had my Tesla Model 3 wrapped and tinted at Black Star Studio, and the entire experience was exceptional. Sharif and the team were professional, and very detail-oriented. The wrap came out beautifully—sleek, clean, and exactly the aesthetic I was going for. The tints were expertly done, and Sharif took the time to explain the process and materials used, which gave me a lot of confidence in the quality of the work. What stood out most was their integrity—Sharif made choices that prioritized long-term quality and customer satisfaction over short-term upsells. You don\'t find that often. Highly recommend Black Star Studio to anyone who values craftsmanship, honesty, and great service. This shop lives up to its name—top tier work, start to finish.',
+    reviewDate:       null,
+    vehicleOrService: 'Tesla Model 3 · Wrap & Tint',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Pierre-Louis Vaz',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'Black Star Studio were fantastic!! The work they did on my Model 3 left me speechless. Very responsive throughout the process. I highly recommend working with them!!',
+    reviewDate:       null,
+    vehicleOrService: 'Tesla Model 3',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+  {
+    reviewerName:     'Somar Amini',
+    avatar:           null,
+    rating:           5,
+    reviewText:       'I had my car wrapped bmw x6 2021 at black star studio they did a phenomenal job! They\'re very competitive on pricing i really recommend black star studio for all your vehicles wrapping , ppf , and much more custom.',
+    reviewDate:       null,
+    vehicleOrService: 'BMW X6 2021 · Full Wrap',
+    projectImage:     null,
+    sourceUrl:        null,
+  },
+];
+
+(function renderReviews() {
+  const grid    = document.getElementById('gr-grid');
+  const dotsEl  = document.getElementById('gr-dots');
+  const scoreEl = document.getElementById('gr-score');
+  const starsEl = document.getElementById('gr-stars');
+  const countEl = document.getElementById('gr-count');
+  const writeBtn = document.getElementById('gr-write-btn');
+  if (!grid) return;
+
+  /* ── Google G icon markup (reused on each card) ── */
+  const GICON = `<svg class="gr-card__gicon" viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+  </svg>`;
+
+  /* ── Star HTML builder ── */
+  function stars(rating, size) {
+    return Array.from({ length: 5 }, (_, i) =>
+      `<span class="gr-star${i < rating ? ' gr-star--filled' : ''}" aria-hidden="true">★</span>`
+    ).join('');
+  }
+
+  /* ── Populate summary bar ── */
+  if (REVIEW_CONFIG.googleScore) {
+    scoreEl.textContent = REVIEW_CONFIG.googleScore;
+    starsEl.innerHTML   = stars(Math.round(REVIEW_CONFIG.googleScore));
+    starsEl.setAttribute('aria-label', `Rating: ${REVIEW_CONFIG.googleScore} out of 5`);
+  } else {
+    scoreEl.textContent = '—';
+    starsEl.innerHTML   = stars(5);
+    starsEl.setAttribute('aria-label', 'Rating pending confirmation');
+  }
+
+  if (REVIEW_CONFIG.googleCount) {
+    countEl.textContent = `(${REVIEW_CONFIG.googleCount} reviews)`;
+  } else {
+    countEl.textContent = '(rating pending)';
+  }
+
+  if (writeBtn && REVIEW_CONFIG.googleReviewUrl !== '#') {
+    writeBtn.href = REVIEW_CONFIG.googleReviewUrl;
+  }
+
+  /* ── Render cards ── */
+  REVIEWS.forEach((r, i) => {
+    const initial = r.reviewerName.charAt(0).toUpperCase();
+    const needsReadMore = r.reviewText.length > 260;
+
+    const avatarHtml = r.avatar
+      ? `<img src="${r.avatar}" alt="${r.reviewerName}" loading="lazy">`
+      : initial;
+
+    const projectImgHtml = r.projectImage
+      ? `<img class="gr-card__project-img" src="${r.projectImage}" alt="Project — ${r.reviewerName}" loading="lazy">`
+      : '';
+
+    const footerContent = [];
+    if (r.vehicleOrService) footerContent.push(`<span class="gr-card__service">${r.vehicleOrService}</span>`);
+
+    const card = document.createElement('div');
+    card.className = 'gr-card';
+    card.innerHTML = `
+      <div class="gr-card__top">
+        <div class="gr-card__avatar">${avatarHtml}</div>
+        <div class="gr-card__meta">
+          <span class="gr-card__name">${r.reviewerName}</span>
+          <div class="gr-card__stars">${stars(r.rating)}</div>
+        </div>
+        ${GICON}
+      </div>
+      <div class="gr-card__text-wrap">
+        <p class="gr-card__text">${r.reviewText}</p>
+        ${needsReadMore ? '<button class="gr-card__read-more" aria-expanded="false">Read more</button>' : ''}
+      </div>
+      ${projectImgHtml}
+      ${footerContent.length ? `<div class="gr-card__footer">${footerContent.join('')}</div>` : ''}
+    `;
+
+    /* Read more toggle */
+    const readMoreBtn = card.querySelector('.gr-card__read-more');
+    if (readMoreBtn) {
+      readMoreBtn.addEventListener('click', () => {
+        const textEl   = card.querySelector('.gr-card__text');
+        const expanded = textEl.classList.toggle('is-expanded');
+        readMoreBtn.textContent       = expanded ? 'Read less' : 'Read more';
+        readMoreBtn.setAttribute('aria-expanded', String(expanded));
+      });
+    }
+
+    grid.appendChild(card);
+  });
+
+  /* ── Mobile scroll dots ── */
+  if (!dotsEl) return;
+
+  REVIEWS.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'gr-dot';
+    d.setAttribute('aria-label', `Review ${i + 1}`);
+    d.addEventListener('click', () => {
+      const cards   = grid.querySelectorAll('.gr-card');
+      const target  = cards[i];
+      if (target) grid.scrollTo({ left: target.offsetLeft - parseFloat(getComputedStyle(grid).paddingLeft), behavior: 'smooth' });
+    });
+    dotsEl.appendChild(d);
+  });
+
+  const dots = [...dotsEl.querySelectorAll('.gr-dot')];
 
   function updateDots() {
-    dotsWrap.querySelectorAll('.reviews__dot').forEach((d, i) =>
-      d.classList.toggle('reviews__dot--active', i === current)
-    );
+    const cards   = [...grid.querySelectorAll('.gr-card')];
+    if (!cards.length) return;
+    const pl      = parseFloat(getComputedStyle(grid).paddingLeft) || 0;
+    const idx     = Math.round((grid.scrollLeft) / (cards[0].offsetWidth + 12));
+    const clamped = Math.max(0, Math.min(idx, dots.length - 1));
+    dots.forEach((d, i) => d.classList.toggle('gr-dot--active', i === clamped));
   }
 
-  function updateActive() {
-    cards.forEach((c, i) => c.classList.toggle('review-card--active', i === current));
-  }
-
-  function goTo(index) {
-    current = ((index % total) + total) % total;
-    /* Slide track so active card is centred in the overflow container */
-    const gap        = parseFloat(getComputedStyle(track).gap) || 24;
-    const cardW      = cards[0].offsetWidth;
-    const ovW        = overflow.offsetWidth;
-    const offset     = current * (cardW + gap) - (ovW - cardW) / 2;
-    track.style.transform = `translateX(${-Math.max(0, offset)}px)`;
-    updateActive();
-    updateDots();
-  }
-
-  prevBtn?.addEventListener('click', () => goTo(current - 1));
-  nextBtn?.addEventListener('click', () => goTo(current + 1));
-
-  /* Keyboard — only when focus is inside the reviews section */
-  document.addEventListener('keydown', e => {
-    const stage = document.querySelector('.reviews__stage');
-    if (!stage?.contains(document.activeElement)) return;
-    if (e.key === 'ArrowLeft')  goTo(current - 1);
-    if (e.key === 'ArrowRight') goTo(current + 1);
-  });
-
-  /* Touch swipe */
-  let tx = 0;
-  track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener('touchend',   e => {
-    const dx = e.changedTouches[0].clientX - tx;
-    if (Math.abs(dx) > 48) goTo(current + (dx < 0 ? 1 : -1));
-  });
-
-  /* Init */
-  goTo(0);
-
-  /* Re-centre on resize */
-  window.addEventListener('resize', () => goTo(current), { passive: true });
+  grid.addEventListener('scroll', updateDots, { passive: true });
+  updateDots();
 })();
 
 
@@ -259,7 +496,7 @@ window.swapPlaceholder = function (selector, html) {
   const BUILDS = [
     {
       name:          'MERCEDES-AMG G63',
-      images:        ['G-class(1).jpg', 'G-class(2).jpg', 'G-class(3).jpg'],
+      images:        ['G-class(1).jpg', 'G-class(2).jpg'],
       imageAlt:      'Mercedes-AMG G63 — Black Star Studio',
       imagePosition: 'center 40%',
       brandLogo:     null,
@@ -267,15 +504,24 @@ window.swapPlaceholder = function (selector, html) {
       colorClass:    'silver',
     },
     {
-      name:          null,
-      images:        [
-        'coffee(1).jpg', 'coffee(2).jpg', 'coffee(3).jpg',
-        'coffee(4).jpg', 'coffee(5).jpg', 'coffee(6).jpg',
-      ],
-      imageAlt:      'Build — Black Star Studio',
+      name:          'RANGE ROVER SVR',
+      images:        ['Rangerover(1).jpg', 'Rangerover(2).jpg', 'Rangerover(3).jpg'],
+      imageAlt:      'Range Rover SVR — Black Star Studio',
       imagePosition: 'center center',
       brandLogo:     null,
-      colorLabel:    'COFFEE',
+      colorLabel:    'MILITARY GREEN · PPF · CERAMIC COATING',
+      colorClass:    'green',
+    },
+    {
+      name:          'PORSCHE · URUS',
+      images:        [
+        'coffee(1).jpg', 'coffee(2).jpg', 'coffee(3).jpg',
+        'coffee(4).jpg', 'coffee(5).jpg',
+      ],
+      imageAlt:      'Porsche · Urus — Black Star Studio',
+      imagePosition: 'center center',
+      brandLogo:     null,
+      colorLabel:    'CERAMIC COATING · PPF · TINT',
       colorClass:    'coffee',
     },
     {
@@ -284,8 +530,8 @@ window.swapPlaceholder = function (selector, html) {
       imageAlt:      'Aston Martin — Black Star Studio',
       imagePosition: 'center center',
       brandLogo:     null,
-      colorLabel:    null,
-      colorClass:    null,
+      colorLabel:    'SATIN GUN BLACK',
+      colorClass:    'black',
     },
     {
       name:          'ROLLS-ROYCE PHANTOM',
@@ -293,17 +539,18 @@ window.swapPlaceholder = function (selector, html) {
       imageAlt:      'Rolls-Royce Phantom — Black Star Studio',
       imagePosition: 'center center',
       brandLogo:     null,
-      colorLabel:    null,
-      colorClass:    null,
+      colorLabel:    'PPF · CERAMIC COATING',
+      colorClass:    'muted',
     },
     {
-      name:          'BMW X6',
-      images:        ['x6(2).jpg', 'x6(1).jpg'],
-      imageAlt:      'BMW X6 — Black Star Studio',
-      imagePosition: 'center center',
-      brandLogo:     null,
-      colorLabel:    null,
-      colorClass:    null,
+      name:           'BMW X6',
+      images:         ['x6(2).jpg', 'x6(1).jpg'],
+      imageAlt:       'BMW X6 — Black Star Studio',
+      imagePosition:  'center center',
+      imagePositions: ['center center', 'center 65%'],
+      brandLogo:      null,
+      colorLabel:     'PPF · WRAPPED IN RED · CERAMIC COATING',
+      colorClass:     'red',
     },
     {
       name:          'MASERATI',
@@ -311,8 +558,8 @@ window.swapPlaceholder = function (selector, html) {
       imageAlt:      'Maserati — Black Star Studio',
       imagePosition: 'center center',
       brandLogo:     null,
-      colorLabel:    null,
-      colorClass:    null,
+      colorLabel:    'CHROME DELETE · CERAMIC COATING · PPF',
+      colorClass:    'muted',
     },
   ];
 
@@ -330,13 +577,14 @@ window.swapPlaceholder = function (selector, html) {
       ? `<div class="build-card__badge"><img src="${b.brandLogo}" alt=""></div>`
       : '';
 
-    const slidesHtml = b.images.map((src, i) =>
-      `<img src="${src}"
+    const slidesHtml = b.images.map((src, i) => {
+      const pos = (b.imagePositions && b.imagePositions[i]) || b.imagePosition;
+      return `<img src="${src}"
             alt="${i === 0 ? b.imageAlt : ''}"
             class="build-card__image${i === 0 ? ' is-active' : ''}"
-            style="object-position:${b.imagePosition}"
-            loading="${i === 0 ? 'eager' : 'lazy'}">`
-    ).join('');
+            style="object-position:${pos}"
+            loading="${i === 0 ? 'eager' : 'lazy'}">`;
+    }).join('');
 
     const dotsHtml = multi
       ? `<div class="build-card__dots" aria-hidden="true">${
@@ -465,7 +713,7 @@ const MAP_CONFIG = {
 
 const _addr = encodeURIComponent(MAP_CONFIG.address);
 MAP_CONFIG.openUrl  = `https://maps.google.com/?q=${_addr}`;
-MAP_CONFIG.embedUrl = `https://maps.google.com/maps?q=${_addr}&z=${MAP_CONFIG.zoom}&output=embed`;
+MAP_CONFIG.embedUrl = `https://maps.google.com/maps?q=${_addr}&z=${MAP_CONFIG.zoom}&output=embed&t=k`;
 
 (function () {
   const iframe = document.getElementById('gmap-iframe');
@@ -516,5 +764,104 @@ MAP_CONFIG.embedUrl = `https://maps.google.com/maps?q=${_addr}&z=${MAP_CONFIG.zo
     success.classList.add('is-visible');
     success.setAttribute('aria-hidden', 'false');
     success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+})();
+
+
+/* ---- SERVICES SHOWCASE ----------------------------------- */
+const SERVICES = [
+  {
+    title:  'VEHICLE WRAPPING',
+    sub:    'Color change · Full & partial',
+    image:  'Wrap(1).jpeg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #231e14 0%, #0d0b08 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'PAINT PROTECTION FILM',
+    sub:    'Long-term surface defense',
+    image:  'PPF.jpeg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #0f1020 0%, #07080e 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'CERAMIC COATING',
+    sub:    'Gloss · Hydrophobic · Lasting protection',
+    image:  'Ceramic_coating.jpg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #141420 0%, #09090d 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'TINTING',
+    sub:    'Heat rejection · Privacy · UV block',
+    image:  'tinting.jpg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #0d1616 0%, #070c0c 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'BLACK OUT',
+    sub:    'Chrome delete · Blacked-out trim · Dark accents',
+    image:  'Black_out(2).jpg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #111111 0%, #050505 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'COMMERCIAL WRAP',
+    sub:    'Fleet · Brand presence · Business identity',
+    image:  'commercial_wrap(2).jpg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #1c1610 0%, #0c0a08 100%)',
+    link:   '#contact',
+  },
+  {
+    title:  'DECALS & STRIPES',
+    sub:    'Custom graphics · Accents · Identity',
+    image:  'decals(2).jpg',
+    imgPos: 'center center',
+    bg:     'linear-gradient(140deg, #16101e 0%, #0b080f 100%)',
+    link:   '#contact',
+  },
+];
+
+(function renderSvcShowcase() {
+  const grid = document.getElementById('svc-showcase-grid');
+  if (!grid) return;
+
+  SERVICES.forEach((s, i) => {
+    const a = document.createElement('a');
+    a.href      = s.link;
+    a.className = 'svc-card';
+
+    const media = s.image
+      ? `<div class="svc-card__media">
+           <img class="svc-card__img" src="${s.image}" alt="${s.title}"
+                style="--img-pos:${s.imgPos}">
+           <div class="svc-card__overlay"></div>
+         </div>`
+      : `<div class="svc-card__media">
+           <div style="position:absolute;inset:0;background:${s.bg}"></div>
+           <div class="svc-card__overlay"></div>
+         </div>`;
+
+    a.innerHTML = `${media}
+      <div class="svc-card__content">
+        <span class="svc-card__number">0${i + 1}</span>
+        <h3  class="svc-card__title">${s.title}</h3>
+        <p   class="svc-card__sub">${s.sub}</p>
+        <span class="svc-card__cta">Book Now &nbsp;→</span>
+      </div>`;
+
+    grid.appendChild(a);
+  });
+
+  /* Attach scroll-fade to each card */
+  grid.querySelectorAll('.svc-card').forEach(el => {
+    el.classList.add('fade-in');
+    fadeObserver.observe(el);
   });
 })();
